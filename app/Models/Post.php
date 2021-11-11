@@ -9,9 +9,6 @@ class Post extends Model
 {
     use HasFactory;
 
-    protected $guarded = []; //only guarding certain fields or turning it off entirely with empty array
-    //protected $fillable = ['title', 'excerpt', 'body']; //explicitly saying what fields can be mass assigned
-
     protected $with = ['category', 'author']; //to solve N+1 problem (eager loading) for every post query performed
 
     public function scopeFilter($query, array $filters)
@@ -40,6 +37,11 @@ class Post extends Model
                 fn($query) => $query->where('username', $author)
             )
         );
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 
     public function category()
